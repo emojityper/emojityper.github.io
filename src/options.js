@@ -176,7 +176,7 @@ class ButtonManager {
    *
    * This retains existing options if they are included in the named results.
    *
-   * @param {!Array<!Array<string>>}
+   * @param {!Array<!Array<string>>} results
    */
   update(results) {
     const options = new Map();
@@ -322,9 +322,8 @@ chooser.addEventListener('click', (ev) => {
       return;
     }
 
-    // this clears the options on choice.
-    // TODO: retain all, and show what you typed as a hint autocomplete
-    const detail = {choice: b.textContent};
+    // hold down alt/meta to replace the previous selection
+    const detail = {choice: b.textContent, replace: ev.altKey};
     typer.dispatchEvent(new CustomEvent('emoji', {detail}));
     provider.select(b.parentNode.dataset['option'], detail.choice);
     label = 'emoji';
@@ -469,11 +468,17 @@ chooser.addEventListener('keydown', (ev) => {
     const initialMore = previous.text && query.text && previous.text.length !== 0 &&
         previous.text.startsWith(query.text.substr(0, previous.text.length)) || false;
 
+    // FIXME(samthor): This needs a bunch of work for nickymode.
+
     let immediate = false;
     if (!previous.text || previous.prefix !== query.prefix) {
       immediate = true;  // type changed, user expects snappiness
     } else if (now - previousQueryAt > longTime) {
       immediate = true;  // it's been a while
+    }
+    if (query.text === '') {
+      immediate = true;
+      manager.update([]);
     }
     previous = query;
     previousQueryAt = now;
@@ -490,6 +495,9 @@ chooser.addEventListener('keydown', (ev) => {
       previousResults = results;
       findSuggest(query.text);
 
+      if (results === null) {
+        return 0;  // not a valid search
+      }
       return manager.update(results);
     };
 

@@ -28,9 +28,11 @@ function upgrade(el) {
   }
 
   // stores the faux-selection shown (different from actual selection in 'state')
+  // stores the faux-selection shown
   const sel = {
     from: el.selectionStart,
     to: el.selectionEnd,
+    emoji: false,
   };
 
   const helper = document.createElement('div');
@@ -150,8 +152,14 @@ function upgrade(el) {
       state.value = el.value;
     }
 
+    // no longer selecting an implicit emoji
+    if (!permitNextChange) {
+      sel.emoji = false;
+    }
+
     // we're pretending to be the user's selection
     if (state.start !== state.end) {
+      // we're pretending to be the user's selection
       datasetSafeDelete(el, 'prefix');
 
       setRange(state.start, state.end);
@@ -169,7 +177,7 @@ function upgrade(el) {
       return false;  // we just got an emoji, retain implicit selection until next change
     }
     if (setRange(from, to)) {
-      // if the range was valid, update the prefix/focus but delete the word (in typing state)
+      // if the range was valid, update the prefix/focus
       el.dataset['focus'] = el.dataset['prefix'] = el.value.substr(from, to - from).toLowerCase();
     }
     return false;
@@ -443,9 +451,15 @@ function upgrade(el) {
   // handle 'emoji' event: if there's a current focus word, then replace it with the new emoji \o/
   el.addEventListener('emoji', (ev) => {
     const emoji = ev.detail.choice;
-    if (!replaceFocus(() => emoji)) { return; }
+    if (sel.emoji && !ev.detail.replace) {
+      sel.from = typer.selectionStart;
+      sel.to = typer.selectionEnd;
+    }
 
-    datasetSafeDelete(el, 'prefix');
+    if (replaceFocus(() => emoji)) {
+      sel.emoji = true;
+      datasetSafeDelete(el, 'prefix');
+    }
   });
 }
 

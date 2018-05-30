@@ -13,7 +13,7 @@ function letterAt(text, pos) {
   }
 
   // return Boolean(re.exec(text.substr(pos, 1)));
-  return code < 5000 && code > 32;
+  return (code < 5000 && code > 32) || code === 12484;  // shruggie
 }
 
 export function match(text, at) {
