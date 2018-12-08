@@ -7,7 +7,7 @@ git checkout gh-pages
 git checkout master
 
 # build and copy
-gulp dist
+yarn dist
 git checkout gh-pages
 git pull
 rm styles-*.css

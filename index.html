@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="utf-8" />
   <title>Emojityper</title>
   <link rel="canonical" href="https://emojityper.com" />
   <meta name="description" content="Emoji ready to copy and paste! The easiest way to type emoji on your keyboard. List of all emoji, just type some words to get emoji. Laughing crying emoji 😂⌨️" />
@@ -34,7 +35,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 // https://gist.github.com/samthor/64b114e4a4f539915a95b91ffd340acc
 !function(){var e=document,t=e.createElement('script');if(!('noModule'in t)&&'onbeforeload'in t){var n=!1;e.addEventListener('beforeload',function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute('nomodule')||!n)return;e.preventDefault()},!0),t.type='module',t.src='.',e.head.appendChild(t),t.remove()}}();
   </script>
-  <script defer nomodule src="dist/support.min.js"></script>
+  <script defer nomodule></script>
   <script type="module" src="src/bundle.js"></script>
   <link rel="manifest" href="manifest.json" />
   <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js"
@@ -47,7 +48,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 
 <div class="extent"></div>
 
-<div class="_dev">
+<div _dev>
   <!-- removed in build -->
   <link rel="stylesheet/less" type="text/css" href="styles.less" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
@@ -160,7 +161,7 @@ if (typer.value) {
   </p>
 </footer>
 
-<script class="_dev">
+<script _dev>
 window.ga = () => {};  // don't send analytics in dev
 </script>
 <script>
