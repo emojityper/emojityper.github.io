@@ -61,33 +61,36 @@ keys.sort((a, b) => {
 });
 
 
-const matchPrefix = (s) => {
+const matchPrefix = (s, preferLetter) => {
+  let cand = null;
+
+  if (s[0] >= 'a' && s[0] <= 'z') {
+    const point = 0x1f1e6 + (s.codePointAt(0) - 97);
+    cand = {length: 1, points: [point, 0xfe0f]};
+  } else if (s[0] >= '0' && s[0] <= '9') {
+    const point = 0x30 + (s.codePointAt(0) - 48);
+    cand = {length: 1, points: [point, 0xfe0f, 0x20e3]};
+  }
+
+  if (preferLetter && cand) {
+    return cand;
+  }
+
   for (const k of keys) {
     if (s.startsWith(k)) {
       return {length: k.length, points: options[k]};
     }
   }
-
-  if (s[0] >= 'a' && s[0] <= 'z') {
-    const point = 0x1f1e6 + (s.codePointAt(0) - 97);
-    return {length: 1, points: [point, 0xfe0f]};
-  }
-
-  if (s[0] >= '0' && s[0] <= '9') {
-    const point = 0x30 + (s.codePointAt(0) - 48);
-    return {length: 1, points: [point, 0xfe0f, 0x20e3]};
-  }
-
-  return null;
+  return cand;
 };
 
 
-export default function(value) {
+export default function(value, preferLetter=false) {
   let work = value.toLowerCase();
   const out = [];
 
   while (work.length) {
-    const matched = matchPrefix(work);
+    const matched = matchPrefix(work, preferLetter);
     if (matched === null) {
       return null;  // fail early, can't emoji-fy this
     }

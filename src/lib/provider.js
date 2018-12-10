@@ -140,8 +140,16 @@ export function request(text, prefix, more=false) {
   }
 
   const typer = type(text);
-  if (typer) {
-    all.push([['^type', typer]]);
+  const typerLetter = type(text, true);
+  if (typer || typerLetter) {
+    const r = ['^type'];
+    if (typer) {
+      r.push(typer);
+    }
+    if (typerLetter && typerLetter !== typer) {
+      r.push(typerLetter);
+    }
+    all.push([r]);
   }
 
   return Promise.all(all).then((out) => results.merge(...out));
