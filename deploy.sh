@@ -10,7 +10,6 @@ git checkout master
 yarn dist
 git checkout gh-pages
 git pull
-rm styles-*.css
 rm bundle-*.js*
 rm support-*.js*
 cp -R dist/* .
