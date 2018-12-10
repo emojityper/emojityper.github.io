@@ -11,7 +11,7 @@ const options = {
   'm': [0x24c2, 0xfe0f],
   'ok': [0x1f197],
   'o': [0x1f17e, 0xfe0f],
-  'p': [0x1f17f],
+  'p': [0x1f17f, 0xfe0f],
   'sos': [0x1f198],
   'up': [0x1f199],
   'vs': [0x1f19a],
@@ -21,7 +21,7 @@ const options = {
   '?': [0x2753],
   '$': [0x1f4b2],
   '£': [0x1f4b7],
-  '€': [0x1f4b6],
+  '€': [0x1f4b6],  // FIXME: emojityper doesn't think this is a word char
   '¥': [0x1f4b4],
   'new': [0x1f195],
   'ng': [0x1f196],
