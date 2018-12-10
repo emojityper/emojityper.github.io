@@ -1711,9 +1711,10 @@ object.omit@^2.0.0:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
 
-ok-emoji@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ok-emoji/-/ok-emoji-1.0.0.tgz#e8aeb1989f9c50a1b5c4493962b1a861f7dcd211"
+ok-emoji@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ok-emoji/-/ok-emoji-1.0.3.tgz#b91a038cd8d4644a1b0b637960ac0061522d8cc6"
+  integrity sha512-6/w66p3ttsDAkEI6ZpeowfsZKP2sAXXgXy9sn5jUCGbuTC4bq/Z2q0QQU/Tiq7tGIMaUeBlagVIPFg4BoKISyg==
 
 once@^1.3.0:
   version "1.3.3"

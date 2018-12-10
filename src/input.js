@@ -121,13 +121,13 @@ function upgrade(el) {
     const s = el.dataset['prefix'] || '';
     const valid = suggest !== null &&
         s.length !== 0 &&
-        suggest.name.substr(0, s.length) === s &&
+        (suggest.name[0] === '^' || suggest.name.substr(0, s.length) === s) &&
         el.value.substr(sel.to).trim().length === 0;
     if (!valid) {
       autocomplete.textContent = '';
       return false;
     }
-    const display = suggest.name.substr(s.length) + suggest.emoji;
+    const display = (suggest.name[0] === '^' ? '' : suggest.name.substr(s.length)) + suggest.emoji;
     autocomplete.textContent = display;
     return true;
   };

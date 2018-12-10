@@ -144,11 +144,7 @@ class ButtonManager {
         return button;
       }
     } else {
-      if (this.buttonPool_.length !== 0) {
-        button = this.buttonPool_.pop();
-      } else {
-        button = document.createElement('button');
-      }
+      button = this.buttonPool_.pop() || document.createElement('button');
       button.textContent = emoji;
       this.buttons_.set(emoji, button);
 
@@ -186,6 +182,7 @@ class ButtonManager {
 
     results.forEach((result) => {
       const name = result[0];
+      const special = (name[0] === '^');
 
       const option = this.optionForName_(name);
       options.set(name, option);
@@ -197,7 +194,7 @@ class ButtonManager {
       for (let i = 0; i < option.children.length; ++i) {
         const b = option.children[i];
         const emoji = b.textContent;
-        if (buttons.has(emoji)) {
+        if (special || buttons.has(emoji)) {
           b.remove();
           this.buttonPool_.push(b);
           --i;
@@ -208,13 +205,14 @@ class ButtonManager {
 
       for (let i = 1, emoji; emoji = result[i]; ++i) {
         if (buttons.has(emoji)) {
-          continue;  // already stolen by something above us
+          continue;  // already displayed by an option before us
         }
         // nb. addEmojiTo_ pulls old buttons from this.buttons_
         buttons.set(emoji, this.addEmojiTo_(option, emoji));
       }
     });
 
+    // remove now-disused options
     this.options_.forEach((option) => {
       // TODO(samthor): Edge doesn't like ...HTMLCollection
       for (let i = 0; i < option.children.length; ++i) {
@@ -445,7 +443,7 @@ chooser.addEventListener('keydown', (ev) => {
         exactMatch = row;
         return false;
       }
-      return row[0].startsWith(q);
+      return row[0].startsWith(q) || row[0][0] === '^';
     });
     exactMatch && localResults.unshift(exactMatch);
 

@@ -19,7 +19,7 @@
     "less": "^3.9.0",
     "less-plugin-autoprefix": "^2.0.0",
     "mkdirp": "^0.5.1",
-    "ok-emoji": "^1.0.0",
+    "ok-emoji": "^1.0.3",
     "rollup": "^0.67.4",
     "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-node-resolve": "^3.4.0",

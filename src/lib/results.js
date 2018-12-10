@@ -20,26 +20,34 @@ function removeDuplicates(row) {
  * Merge the given results arrays. These will both be in the form of:
  *   [[name, emoji1, emoji2,....], ...]
  *
- * The first argument will be updated with the data from the second argument.
+ * The first argument will be updated with the data from the following arguments.
  *
- * @param {!Array<!Array<string>>} existing
- * @param {!Array<!Array<string>>} update
+ * @param {...!Array<!Array<string>>} all
  */
-export function merge(existing, update) {
+export function merge(...all) {
+  if (!all.length) {
+    return [];
+  }
+
   const lookup = {};
+  const existing = all.shift();
   existing.forEach((row, i) => lookup[row[0]] = i);
 
-  update.forEach((row) => {
-    const index = lookup[row[0]];
-    if (index === undefined) {
-      lookup[row[0]] = existing.length;  // in case there's dup data
-      existing.push(row);
-      return;
-    }
-
-    // otherwise, just append all new data and place back into array
-    const existingRow = existing[index];
-    const updatedData = row.slice(1);
-    existing[index] = removeDuplicates(existingRow.concat(updatedData));
+  all.forEach((update) => {
+    update.forEach((row) => {
+      const index = lookup[row[0]];
+      if (index === undefined) {
+        lookup[row[0]] = existing.length;  // in case there's dup data
+        existing.push(row);
+        return;
+      }
+  
+      // otherwise, just append all new data and place back into array
+      const existingRow = existing[index];
+      const updatedData = row.slice(1);
+      existing[index] = removeDuplicates(existingRow.concat(updatedData));
+    });
   });
+
+  return existing;
 }

@@ -5,6 +5,7 @@ const selectionDelay = 5 * 1000;
 import build from './prefixgen.js';
 import * as promises from './promises.js';
 import * as results from './results.js';
+import type from './type.js';
 
 /**
  * @param {string} key for endpoint/cache
@@ -124,22 +125,26 @@ export function request(text, prefix, more=false) {
     return Promise.resolve([]);
   }
 
-  const localPromise = getPrefixGen().then((suggest) => suggest(text, prefix));
-  if (!more) {
-    return localPromise;
+  const all = [
+    getPrefixGen().then((suggest) => suggest(text, prefix)),
+  ];
+
+  if (more) {
+    // TODO: At some point, the 'more' data should go into a local cache. For now, just fetch.
+    let url = `${api}/q?q=${window.encodeURIComponent(text)}`;
+    if (!prefix) {
+      url += '&exact';
+    }
+    const morePromise = window.fetch(url).then((out) => out.json()).then((out) => out['results']);
+    all.push(morePromise);
   }
 
-  // TODO: At some point, the 'more' data should go into a local cache. For now, just fetch.
-  let url = `${api}/q?q=${window.encodeURIComponent(text)}`;
-  if (!prefix) {
-    url += '&exact';
+  const typer = type(text);
+  if (typer) {
+    all.push([['^type', typer]]);
   }
-  const morePromise = window.fetch(url).then((out) => out.json()).then((out) => out['results']);
-  return Promise.all([localPromise, morePromise]).then((both) => {
-    const [local, more] = both;
-    results.merge(local, more);
-    return local;
-  });
+
+  return Promise.all(all).then((out) => results.merge(...out));
 }
 
 /**

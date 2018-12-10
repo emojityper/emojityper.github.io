@@ -544,8 +544,12 @@ main {
   &.modifier::before {
     color: @color-modifier;
   }
-  &.special::before {
-    color: @color-special;
+  &.special {
+    display: block;
+
+    &::before {
+      color: @color-special;
+    }
   }
   &:empty {
     display: none;
