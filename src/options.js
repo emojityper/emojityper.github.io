@@ -154,6 +154,9 @@ class ButtonManager {
         }
 
         const node = this.buttonTarget_.get(button);
+        if (!node) {
+          return;  // we were GC'ed before valid returned
+        }
         node.parentNode.replaceChild(button, node);
         this.buttonTarget_.delete(button);
       });
