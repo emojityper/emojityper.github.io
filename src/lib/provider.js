@@ -1,5 +1,5 @@
 const api = 'https://emojibuff.appspot.com/api';
-const recentLimit = 8;
+const recentLimit = 16;
 const selectionDelay = 5 * 1000;
 
 import build from './prefixgen.js';
