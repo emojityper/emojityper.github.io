@@ -66,7 +66,7 @@ const matchPrefix = (s, preferLetter) => {
 
   if (s[0] >= 'a' && s[0] <= 'z') {
     const point = 0x1f1e6 + (s.codePointAt(0) - 97);
-    cand = {length: 1, points: [point, 0xfe0f]};
+    cand = {length: 1, points: [0x200c, point, 0x200c]};
   } else if (s[0] >= '0' && s[0] <= '9') {
     const point = 0x30 + (s.codePointAt(0) - 48);
     cand = {length: 1, points: [point, 0xfe0f, 0x20e3]};
@@ -87,7 +87,7 @@ const matchPrefix = (s, preferLetter) => {
 
 export default function(value, preferLetter=false) {
   let work = value.toLowerCase();
-  const out = [];
+  let out = [];
 
   while (work.length) {
     const matched = matchPrefix(work, preferLetter);
@@ -97,6 +97,15 @@ export default function(value, preferLetter=false) {
     out.push(...matched.points);
     work = work.substr(matched.length);
   }
+
+  let prev = undefined;
+  out = out.filter((point) => {
+    if (point === 0x200c && prev === point) {
+      return false;
+    }
+    prev = point;
+    return true;
+  });
 
   return String.fromCodePoint(...out);
 }

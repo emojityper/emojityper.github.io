@@ -230,6 +230,11 @@ outer:
         stats.gender.neutral |= flip.neutral;
       }
 
+      // make sure we're a single valid char now
+      if (!isSingle(String.fromCodePoint(...part))) {
+        continue;
+      }
+
       // measure if diversity is possible (only on first char)
       if (basicDiversity && !stats.tone && !trailer && !skipDiversity(first)) {
         const cand = String.fromCodePoint(first, 0x1f3fb);
@@ -278,6 +283,10 @@ outer:
 
       if (skipDiversity(points[0])) {
         return;  // skip
+      }
+
+      if (points.length === 1 && !isSingle(String.fromCodePoint(points[0]))) {
+        return;  // not valid
       }
 
       const cand = String.fromCodePoint(points[0], op.tone, ...points.slice(1));
@@ -335,6 +344,9 @@ outer:
 
         // we need to see if it's possible, clone _whole_ emoji
         const run = all[i].slice();
+        if (!isSingle(run)) {
+          return null;  // not valid to apply to anyway
+        }
         run.push(emoji.runeZWJ, 0x2640, emoji.runeVS16);
         const cand = String.fromCodePoint(...run);
         if (!isSingle(cand)) {
