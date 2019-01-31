@@ -187,7 +187,9 @@ async function build() {
     document.head.appendChild(styleNode);
 
     // fix paths for module/nomodule code
-    document.head.querySelector('script[nomodule]').src = writer.get('support.js');
+    const supportNode = document.head.querySelector('script#support');
+    supportNode.src = writer.get('support.js');
+    supportNode.removeAttribute('id');
     document.head.querySelector('script[src^="src/"]').src = writer.get('bundle.js');
 
     // remove all dev things
