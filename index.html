@@ -38,9 +38,6 @@ if (window.location.hostname.indexOf('www.') === 0) {
   <script defer nomodule></script>
   <script type="module" src="src/bundle.js"></script>
   <link rel="manifest" href="manifest.json" />
-  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js"
-      integrity="sha384-ptgwb3/v69WGur7IwSnWOowVxE7hcRB3DG/EiHdejrw2sFNwUHynFbiRMPxc4hdS"
-      crossorigin="anonymous"></script>
   <meta name="theme-color" content="#1abc9c" />
   <link rel="shortcut icon" type="image/png" href="res/icon-128.png" />
 </head>
@@ -48,7 +45,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 
 <div class="extent"></div>
 
-<div _dev>
+<div _dev id="_dev">
   <!-- removed in build -->
   <link rel="stylesheet/less" type="text/css" href="styles.less" />
   <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.7.2/less.min.js"></script>
@@ -160,19 +157,6 @@ if (typer.value) {
     </span>
   </p>
 </footer>
-
-<script _dev>
-window.ga = () => {};  // don't send analytics in dev
-</script>
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-navigator.sendBeacon && ga('set', 'transport', 'beacon');
-ga('create', 'UA-39885839-6', 'auto');
-ga('send', 'pageview');
-</script>
 
 <div class="extent"></div>
 
