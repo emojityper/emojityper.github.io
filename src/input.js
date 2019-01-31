@@ -261,7 +261,7 @@ function upgrade(el) {
 
     // lots of listeners for a million different change reasons
     const rest = 'change keydown keypress focus click mousedown touchstart select input select-all select-end blur';
-    rest.split(/\s+/).forEach((event) => el.addEventListener(event, dedup));
+    rest.split(/\s+/).forEach((event) => el.addEventListener(event, dedup, {passive: true}));
     dedup();
 
     // handle 'suggest' event: show default autocomplete option

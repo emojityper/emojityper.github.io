@@ -1,4 +1,4 @@
-const api = 'https://emojibuff.appspot.com/api';
+const api = 'https://emojibuff.com/api';
 const recentLimit = 16;
 const selectionDelay = 5 * 1000;
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://emojibuff.com" />
+  <link rel="preconnect" href="https://www.google-analytics.com" />
   <meta charset="utf-8" />
   <title>Emojityper</title>
   <link rel="canonical" href="https://emojityper.com" />
@@ -52,7 +54,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 </div>
 
 <header>
-  <h1>Emojityper</h1>
+  <h1><label for="typer">Emojityper</label></h1>
   <div class="grow"></div>
   <div id="loader" hidden>
     <span class="face">&#x1f914;</span><span class="think">&#x1f4aD;</span>
@@ -64,7 +66,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 
 <main>
   <div id="input">
-    <input type="text" id="typer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="&nbsp;" autofocus required />
+    <input type="text" id="typer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="&nbsp;" autofocus />
     <div class="focus"></div>
     <div class="ui">
       <button id="copy" data-copied="Copied!">Copy</button>
