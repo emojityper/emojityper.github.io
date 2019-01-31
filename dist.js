@@ -52,7 +52,11 @@ async function buildLess(filename) {
   };
 }
 
-async function buildJS(filename, esTarget) {
+async function buildJS(input, esTarget) {
+  if (typeof input === 'string') {
+    input = [input];
+  }
+
   const babelOptions = {
     compact: true,
     sourcemap: true,
@@ -65,7 +69,7 @@ async function buildJS(filename, esTarget) {
   };
 
   const bundle = await rollup.rollup({
-    input: filename,
+    input,
     plugins: [
       rollupNodeResolve(),
       babelPlugin(babelOptions),
@@ -74,10 +78,12 @@ async function buildJS(filename, esTarget) {
   });
 
   const generated = await bundle.generate({format: 'es', sourcemap: true});
-  return {
-    code: generated.code,
-    map: generated.map,
-  };
+  return generated.output.map((raw) => {
+    return {
+      code: raw.code,
+      map: raw.map,
+    };
+  });
 }
 
 async function buildHTML(filename, callback=() => {}, options={}) {
@@ -118,7 +124,8 @@ class Writer {
       code = out.code;
       map = out.map || undefined;
     } else {
-      throw new Error(`can't write: ${out}`)
+      console.warn('got out', out);
+      throw new Error(`can't write: ${out} ${JSON.stringify(out)}`)
     }
   
     if (options.hash === undefined || options.hash === true) {
@@ -164,11 +171,11 @@ async function build() {
 
   // module JS
   const bundleJS = await buildJS('src/bundle.js', true);
-  await writer.write('bundle.js', bundleJS);
+  await writer.write('bundle.js', bundleJS[0]);
 
   // nomodule JS
   const supportJS = await buildJS('src/support.js', false);
-  await writer.write('support.js', supportJS);
+  await writer.write('support.js', supportJS[0]);
 
   // HTML to update deps
   const html = await buildHTML('index.html', (document) => {
