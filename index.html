@@ -37,7 +37,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 !function(){var e=document,t=e.createElement('script');if('onbeforeload'in t){var n=!1;e.addEventListener('beforeload',function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute('nomodule')||!n)return;e.preventDefault()},!0),t.type='module',t.src='.',e.head.appendChild(t),t.remove()}}();
   </script>
   <script defer nomodule id="support"></script>
-  <script type="module" src="src/bundle.js"></script>
+  <script type="module" src="src/entrypoint/main.js"></script>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#1abc9c" />
   <link rel="shortcut icon" type="image/png" href="res/icon-128.png" />
@@ -46,7 +46,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
 @import url('https://fonts.googleapis.com/css?family=Lobster&amp;text=Emojityper');
   </style>
 </head>
-<body tabindex="-1" data-version="dev">
+<body tabindex="-1" data-version="dev" data-ext="src/entrypoint/ext.js">
 
 <div class="extent"></div>
 

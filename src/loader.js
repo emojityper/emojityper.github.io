@@ -12,6 +12,14 @@ integrity="sha384-ptgwb3/v69WGur7IwSnWOowVxE7hcRB3DG/EiHdejrw2sFNwUHynFbiRMPxc4h
 crossorigin="anonymous">
 </script>`;
 
+    if (!document.currentScript) {
+      // absence indicates we're in module mode, so load extended code
+      const scriptExtended = document.createElement('script');
+      scriptExtended.src = document.body.getAttribute('data-ext');
+      scriptExtended.type = 'module';
+      document.head.appendChild(scriptExtended);
+    }
+
     if (window._dev) {
       return;  // don't analytics in dev
     }

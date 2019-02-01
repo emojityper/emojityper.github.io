@@ -77,11 +77,18 @@ async function buildJS(input, esTarget) {
     ],
   });
 
-  const generated = await bundle.generate({format: 'es', sourcemap: true});
+  const generated = await bundle.generate({
+    format: 'es',
+    sourcemap: true,
+    entryFileNames: '[hash].js',
+    chunkFileNames: '[hash].js',
+  });
   return generated.output.map((raw) => {
     return {
+      name: raw.fileName,
       code: raw.code,
       map: raw.map,
+      imports: raw.imports || null,
     };
   });
 }
@@ -111,52 +118,42 @@ async function buildHTML(filename, callback=() => {}, options={}) {
 class Writer {
   constructor(base) {
     this._base = base;
-    this._hash = {};
+    this._done = {};
   }
 
-  async write(target, out, options={}) {
+  async write(out, name=undefined) {
     let code;
     let map;
-  
+
+    name = name || out.name;
+    
+    if (this._done[name]) {
+      throw new Error(`duplicate write: ${name}`);
+    }
+    this._done[name] = true;
+
     if (typeof out === 'string' || out instanceof Buffer) {
       code = out;
     } else if (out.code) {
       code = out.code;
       map = out.map || undefined;
     } else {
-      console.warn('got out', out);
       throw new Error(`can't write: ${out} ${JSON.stringify(out)}`)
-    }
-  
-    if (options.hash === undefined || options.hash === true) {
-      const h = crypto.createHash('md5').update(code).digest('hex').slice(0, 10);
-      const extname = path.extname(target);
-    
-      // generate mildly hashed name and store
-      const original = target;
-      target = target.substr(0, target.length - extname.length) + '-' + h + extname;
-      this._hash[original] = target;
     }
   
     if (map) {
       // nb. only works for JS, not CSS (needs C style)
-      code += `\n//# sourceMappingURL=${path.basename(target)}.map`
+      code += `\n//# sourceMappingURL=${path.basename(name)}.map`
     }
 
-    const dir = path.join(this._base, path.dirname(target));
+    const dir = path.join(this._base, path.dirname(name));
     await mkdirp(dir);
   
-    const filename = path.join(dir, target)
+    const filename = path.join(dir, name)
     if (map) {
       await fs.writeFile(filename + '.map', map);
     }
     await fs.writeFile(filename, code);
-  
-    return target;
-  }
-
-  get(target) {
-    return this._hash[target] || target;
   }
 }
 
@@ -170,12 +167,16 @@ async function build() {
   const styles = await buildLess('styles.less');
 
   // module JS
-  const bundleJS = await buildJS('src/bundle.js', true);
-  await writer.write('bundle.js', bundleJS[0]);
+  const bundleJS = await buildJS(['src/entrypoint/main.js', 'src/entrypoint/ext.js'], true);
+  for (const out of bundleJS) {
+    await writer.write(out);
+  }
 
   // nomodule JS
-  const supportJS = await buildJS('src/support.js', false);
-  await writer.write('support.js', supportJS[0]);
+  const supportJS = await buildJS('src/entrypoint/support.js', false);
+  for (const out of supportJS) {
+    await writer.write(out);
+  }
 
   // HTML to update deps
   const html = await buildHTML('index.html', (document) => {
@@ -186,16 +187,27 @@ async function build() {
     const styleNode = Object.assign(document.createElement('style'), {textContent: styles.code});
     document.head.appendChild(styleNode);
 
-    // fix paths for module/nomodule code
+    // insert path for nomodule code
     const supportNode = document.head.querySelector('script#support');
-    supportNode.src = writer.get('support.js');
+    supportNode.src = supportJS[0].name;
     supportNode.removeAttribute('id');
-    document.head.querySelector('script[src^="src/"]').src = writer.get('bundle.js');
+
+    // setup module code and extended bundle
+    const moduleNode = document.head.querySelector('script[src^="src/"]');
+    moduleNode.src = bundleJS[0].name;
+    document.body.setAttribute('data-ext', bundleJS[1].name);
+
+    for (const {name} of bundleJS.slice(2)) {
+      const preload = document.createElement('link');
+      preload.setAttribute('rel', 'modulepreload');
+      preload.setAttribute('href', name);
+      document.head.insertBefore(preload, moduleNode);
+    }
 
     // remove all dev things
     Array.from(document.querySelectorAll('[_dev]')).forEach((x) => x.remove());
   });
-  await writer.write('index.html', html, {hash: false})
+  await writer.write(html, 'index.html');
 
   // copy random files
   const files = await globAll(
@@ -234,7 +246,7 @@ async function build() {
   // minify SW
   const code = await fs.readFile(target, 'utf8');
   const minified = await terserMinify(code);
-  await fs.writeFile(target, minified);
+  await writer.write(minified, 'sw.js');
 
   log('Done!');
 }

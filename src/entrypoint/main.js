@@ -1,15 +1,15 @@
 
-import './polyfill.js';
-import './buttons.js';
-import './input.js';
-import './options.js';
-import './selection.js';
-import './page.js';
-import './adverts.js';
-import './sw.js';
-import './offline.js';
-import './placeholders.js';
-import './loader.js';
+/**
+ * @fileoverview Initial payload entrypoint.
+ */
+
+import '../polyfill.js';
+import '../loader.js';  // first, as this adds ga()
+
+import '../buttons.js';
+import '../input.js';
+import '../options.js';
+import '../page.js';
 
 // global error handler for logs
 window.onerror = (msg, file, line, col, error) => {
