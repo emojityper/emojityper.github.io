@@ -5,6 +5,8 @@
 @color-special: #00eb79;
 @color-input: #4a5767;
 
+@dim-minimal: 400px;
+
 // nb: does NOT include Arial: this causes Chrome 59? to not combine gender emoji properly
 @fonts-normal: 'Lato', 'Helvetica Neue', 'Helvetica', sans-serif;
 
@@ -43,7 +45,7 @@ body {
   font-size: 38px;
   font-family: @fonts-normal;
 
-  @media (max-height: 400px) {
+  @media (max-height: @dim-minimal) {
     padding: 0.5em;
     padding-top: 0.125em;
     font-size: 28px;
@@ -437,6 +439,14 @@ main {
       color: @color-placeholder;
       opacity: 0.33;
     }
+    @media (max-height: (@dim-minimal)) {
+      &::placeholder {
+        opacity: 0;
+      }
+      &::-ms-input-placeholder {
+        opacity: 0;
+      }
+    }
     &:focus {
       outline: none;
     }
@@ -705,14 +715,14 @@ form.pending button:disabled {
   }
 }
 
-@media (min-height: 401px) {
+@media (min-height: (@dim-minimal + 1px)) {
   header {
     #popout {
       display: none;
     }
   }
 }
-@media (max-height: 400px) {
+@media (max-height: @dim-minimal) {
   @aside-height: 32px;
   body {
     max-height: 100vh;
