@@ -10,6 +10,7 @@ import '../buttons.js';
 import '../input.js';
 import '../options.js';
 import '../page.js';
+import '../sw.js';
 
 // global error handler for logs
 window.onerror = (msg, file, line, col, error) => {

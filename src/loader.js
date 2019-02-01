@@ -2,6 +2,10 @@ import {sendBeacon} from './polyfill.js';
 
 // defer extra scripts until after 'load' event
 window.addEventListener('load', (ev) => {
+  if (window.parent) {
+    window.parent.postMessage('load', '*');
+  }
+
   window.requestAnimationFrame(() => {
     const scriptPWACompat = document.createElement('script');
     document.head.appendChild(scriptPWACompat);
