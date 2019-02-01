@@ -17,14 +17,11 @@ if (!window.requestIdleCallback) {
   window.cancelIdleCallback = id => window.clearTimeout(id);
 }
 
+export const sendBeacon = !navigator.sendBeacon;
 if (!navigator.sendBeacon) {
   navigator.sendBeacon = function(url, body) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', url, true);
-      xhr.onerror = reject;
-      xhr.onload = resolve;
-      xhr.send(body);
-    });
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.send(body);
   };
 }
