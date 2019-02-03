@@ -107,7 +107,7 @@ function upgrade(el) {
     sel.from = from;
     sel.to = Math.max(from, to);
     if (from >= to) {
-      datasetSafeDelete(el, 'prefix', 'word', 'focus');
+      datasetSafeDelete(el, 'prefix', 'focus');
       underline.hidden = true;
       return false;
     }
@@ -119,10 +119,12 @@ function upgrade(el) {
   // rerender autocomplete word if valid
   const renderAutocomplete = () => {
     const s = el.dataset['prefix'] || '';
+
+    const atEnd = el.value.substr(sel.to).trim().length === 0;
     const valid = suggest !== null &&
         s.length !== 0 &&
         (suggest.name[0] === '^' || suggest.name.substr(0, s.length) === s) &&
-        el.value.substr(sel.to).trim().length === 0;
+        atEnd;
     if (!valid) {
       autocomplete.textContent = '';
       return false;
@@ -150,7 +152,7 @@ function upgrade(el) {
 
     // we're pretending to be the user's selection
     if (state.start !== state.end) {
-      datasetSafeDelete(el, 'prefix', 'word');
+      datasetSafeDelete(el, 'prefix');
 
       setRange(state.start, state.end);
 
@@ -169,7 +171,6 @@ function upgrade(el) {
     if (setRange(from, to)) {
       // if the range was valid, update the prefix/focus but delete the word (in typing state)
       el.dataset['focus'] = el.dataset['prefix'] = el.value.substr(from, to - from).toLowerCase();
-      datasetSafeDelete(el, 'word');
     }
     return false;
   };
@@ -221,7 +222,7 @@ function upgrade(el) {
     if (alreadyAtState) { return; }
 
     // send query: prefix or whole-word (unless nothing is focused)
-    const text = el.dataset['focus'] ? el.dataset['prefix'] || el.dataset['word'] || null : '';
+    const text = el.dataset['focus'] ? el.dataset['prefix'] || null : '';
     const detail = {
       text,
       prefix: 'prefix' in el.dataset,
@@ -321,7 +322,6 @@ function upgrade(el) {
     ga('send', 'event', 'options', 'typing');
     const detail = {
       choice: suggest.emoji,
-      word: suggest.name,
     };
     typer.dispatchEvent(new CustomEvent('emoji', {detail}));
     return true;
@@ -441,8 +441,6 @@ function upgrade(el) {
     const emoji = ev.detail.choice;
     if (!replaceFocus(() => emoji)) { return; }
 
-    // listen to the caller's view on what word we should pretend this emoji is
-    el.dataset['word'] = ev.detail.word || '';
     datasetSafeDelete(el, 'prefix');
   });
 }
