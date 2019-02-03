@@ -11,8 +11,8 @@ window.addEventListener('load', (ev) => {
     document.head.appendChild(scriptPWACompat);
     scriptPWACompat.outerHTML = `
 <script
-src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js"
-integrity="sha384-ptgwb3/v69WGur7IwSnWOowVxE7hcRB3DG/EiHdejrw2sFNwUHynFbiRMPxc4hdS"
+src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.8/pwacompat.min.js"
+integrity="sha384-uONtBTCBzHKF84F6XvyC8S0gL8HTkAPeCyBNvfLfsqHh+Kd6s/kaS4BdmNQ5ktp1"
 crossorigin="anonymous">
 </script>`;
 
@@ -42,6 +42,18 @@ tempGA['q'] = [];
 tempGA['l'] = 1 * new Date;
 window['ga'] = tempGA;
 window['GoogleAnalyticsObject'] = 'ga';
+
+window.addEventListener('message', (ev) => {
+  const type = ev.data.type || '';
+  switch (type) {
+    case 'ga':
+      // used by extension to log load time
+      ga.apply(null, ev.data.payload);
+      break;
+    default:
+      console.debug('unhandled message', ev.data);
+  }
+});
 
 // enqueue initial GA events
 sendBeacon || ga('set', 'transport', 'beacon');
