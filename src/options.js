@@ -236,13 +236,6 @@ class ButtonManager {
   }
 }
 
-// key overrides to recognize spacebar causing 'click'
-let spaceFrame = 0;
-chooser.addEventListener('keyup', (ev) => {
-  if (ev.key !== ' ' || ev.target.localName !== 'button') { return; }
-  spaceFrame = window.setTimeout(() => spaceFrame = 0, 0);
-});
-
 // stores the previous user-driven l/r position
 let previousChooserLeft = undefined;
 let duringNavigate = false;
@@ -328,12 +321,9 @@ chooser.addEventListener('click', (ev) => {
       return;
     }
 
-    // nb. we typically clear the word on choice (as it confuses @nickyringland), but if you hit
-    // space or ctrl-click the button, keep it around.
-    const retainWord = (spaceFrame !== 0 || ev.metaKey || ev.ctrlKey);
-    const word = retainWord ? b.parentNode.dataset['option'] : null;
-
-    const detail = {choice: b.textContent, word};
+    // this clears the options on choice.
+    // TODO: retain all, and show what you typed as a hint autocomplete
+    const detail = {choice: b.textContent};
     typer.dispatchEvent(new CustomEvent('emoji', {detail}));
     provider.select(b.parentNode.dataset['option'], detail.choice);
     label = 'emoji';
