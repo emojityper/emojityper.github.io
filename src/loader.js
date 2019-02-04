@@ -2,7 +2,7 @@ import {sendBeacon} from './polyfill.js';
 
 // defer extra scripts until after 'load' event
 window.addEventListener('load', (ev) => {
-  if (window.parent) {
+  if (window.parent && window.parent !== window) {
     window.parent.postMessage('load', '*');
   }
 
