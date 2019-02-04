@@ -78,6 +78,7 @@ if (window.location.hostname.indexOf('www.') === 0) {
   <script>
 window.addEventListener('hashchange', function(ev) {
   typer.value = window.decodeURI(window.location.hash.substr(1));
+  typer.dispatchEvent(new CustomEvent('select-end'));
 });
 typer.value = window.decodeURI(window.location.hash.substr(1));
 typer.addEventListener('value', function(ev) {
