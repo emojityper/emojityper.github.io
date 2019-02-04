@@ -11,6 +11,7 @@ import * as promises from './lib/promises.js';
 import * as eventlib from './lib/event.js';
 import * as input from './input.js';
 import * as copier from './lib/copier.js';
+import {minimalHeight} from './lib/const.js';
 
 /**
  * ButtonManager helps create and show emoji buttons in the UI.
@@ -497,7 +498,7 @@ chooser.addEventListener('keydown', (ev) => {
 
       if (!query.text) {
         // TODO: delay empty data by a decent time, except on small screens
-        const timeout = window.innerHeight <= 400 ? 0 : 750;
+        const timeout = window.innerHeight <= minimalHeight ? 125 : 750;
         return request(timeout, true);
       }
 
