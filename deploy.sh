@@ -10,8 +10,7 @@ git checkout master
 yarn dist
 git checkout gh-pages
 git pull
-rm bundle-*.js*
-rm support-*.js*
+rm *.js*
 cp -R dist/* .
 
 # try to checkin code, only commit if change
