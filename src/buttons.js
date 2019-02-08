@@ -5,6 +5,7 @@
 
 import * as eventlib from './lib/event.js';
 import * as copier from './lib/copier.js';
+import {iframeAnnounce} from './lib/announce.js';
 
 const all = Array.from(input.querySelectorAll('button'));
 
@@ -17,13 +18,6 @@ typer.addEventListener('value', handler);
 handler({detail: typer.value});
 
 const buttonTextShow = 500;
-
-function notifyParentCopy() {
-  // notify parent (for ext)
-  if (window.parent) {
-    window.parent.postMessage('copy', '*');
-  }
-}
 
 // copy handler
 (function(button, input) {
@@ -50,7 +44,7 @@ function notifyParentCopy() {
       button.textContent = defaultText;
       button.classList.remove('copied');
       maybeReleaseInputEnter();
-      notifyParentCopy();
+      iframeAnnounce('copy');
     }, buttonTextShow);
   };
 
