@@ -27,6 +27,6 @@
     "run-sequence": "^2.2.1",
     "terser": "^3.11.0",
     "uglify-es": "3.3.9",
-    "workbox-build": "^3.2.0"
+    "workbox-build": "^3.6.3"
   }
 }

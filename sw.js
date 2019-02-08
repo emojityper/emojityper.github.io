@@ -1,4 +1,4 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.2.0/workbox-sw.js');
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.0.0-rc.0/workbox-sw.js');
 
 workbox.precaching.precacheAndRoute([]);
 workbox.googleAnalytics.initialize();
@@ -15,7 +15,7 @@ realURLs.forEach((prefix) => {
   // TODO: This only caches the request on the 2nd load. However it's probably coming out of cache
   // for a while anyway because the resources are served with stupid high expiries.
   const r = new RegExp('^' + escape(prefix) + '.*');
-  workbox.routing.registerRoute(r, workbox.strategies.cacheFirst());
+  workbox.routing.registerRoute(r, new workbox.strategies.CacheFirst());
 });
 
 self.addEventListener('install', (event) => {
