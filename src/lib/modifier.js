@@ -72,7 +72,7 @@ function isFamilyMember(p) {
  */
 const genderFlip = (function() {
   const list = [
-    0x1f468, 0x1f469, 0,        // man, woman (normal case)
+    0x1f469, 0x1f468, 0,        // woman, man (normal case)
     0x1f936, 0x1f385, 0,        // mrs. claus, santa
     0x1f483, 0x1f57a, 0,        // dancers
     0x1f470, 0x1f935, 0,        // bride, man in tuxedo
