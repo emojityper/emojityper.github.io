@@ -11,6 +11,7 @@
   "dependencies": {
     "@babel/core": "^7.2.0",
     "@babel/preset-env": "^7.2.0",
+    "advanced-input": "^0.0.8",
     "clean-css": "^4.2.1",
     "core-js": "^2.5.6",
     "del": "^3.0.0",

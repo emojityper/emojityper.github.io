@@ -1,0 +1,194 @@
+#input {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: @color-input;
+  font-variant-ligatures: none;  // splitting ligatures might give different total size
+
+  // allows Safari border-radius to work with overflow
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+}
+
+.ui {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  background: @color-input;
+  z-index: 10;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 32px;
+    right: 100%;  // appear off right of .ui
+    background: linear-gradient(to right, fadeout(@color-input, 100%), @color-input 100%);
+  }
+
+  button#copy {
+    pointer-events: auto;
+    margin-left: 4px;
+    margin-right: 14px;
+  }
+}
+
+input, #render {
+  font: inherit;
+  font-family: @fonts-emoji;
+  font-size: 1em;
+  // include padding on both sides, for IE11/Edge
+  line-height: ~"calc(1.5em + 12px)";
+  height: ~"calc(1.5em + 12px)";
+  border: 0;
+
+  @supports (-ms-ime-align:auto) {
+    font-family: @fonts-edge-emoji;
+  }
+}
+
+@indent: 15px;
+
+input {
+  position: relative;  // place above underline
+  background: transparent;
+  width: 0;  // combined with flex-grow, this doesn't eat more space than it should
+  flex-grow: 1;
+  box-sizing: border-box;
+  color: white;
+  text-indent: @indent;
+
+  // microsoft X button
+  &::-ms-clear {
+    display: none;
+  }
+
+  &:valid {
+    padding-right: 32px;
+  }
+
+  @supports (-ms-ime-align:auto) {
+    // For IE11/Edge, don't use text-indent: it's applied twice to the placeholder.
+    text-indent: 0;
+    padding-left: @indent;
+    padding-right: @indent;
+  }
+
+  &::selection {
+    background: transparent;
+  }
+  &::-moz-selection {
+    /** firefox only */
+    background: transparent;
+  }
+  &::placeholder {
+    color: @color-placeholder;
+    opacity: 0.33;
+  }
+  &::-ms-input-placeholder {
+    color: @color-placeholder;
+    opacity: 0.33;
+  }
+  @media (max-height: (@dim-minimal)) {
+    &::placeholder {
+      opacity: 0;
+    }
+    &::-ms-input-placeholder {
+      opacity: 0;
+    }
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+input + .focus {
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  border: 3px solid #606b79;
+  opacity: 0;
+  will-change: opacity;
+  z-index: 11;
+}
+input:focus + .focus {
+  opacity: 1;
+}
+
+
+#render {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  color: transparent;
+  padding-left: @indent;
+  white-space: pre;
+}
+
+._align {
+  position: absolute;
+
+  > span {
+    display: inline;
+    visibility: visible;
+  }
+
+  > ._highlight {
+    margin: 6px -1px;
+    padding: 0 1px;
+    background: white;
+    opacity: 0.125;
+    border-radius: 0.15em;
+  }
+
+  > .selected {
+    height: ~"calc(1.5em - 8px)";  /* extra 4px margin, == 8px */
+    border-radius: 0.05em;
+    background: @color-feature;
+    opacity: 0.75;
+  }
+}
+
+.autocomplete {
+  visibility: visible;
+  color: @color-placeholder;
+  opacity: 0.33;
+}
+
+// .sizer {
+//   background: red;  // should never be shown
+//   border-right: 0;
+//   padding-right: 0;
+//   display: inline-block;
+//   white-space: pre;
+
+//   .nonce {
+//     width: 10px;
+//     height: 100%;
+//     background: blue;
+//     display: inline-block;
+//   }
+// }
+// .autocomplete {
+//   position: absolute;
+//   visibility: visible;
+//   background: transparent;
+//   color: @color-placeholder;
+//   opacity: 0.33;
+//   margin-left: (-2px + @indent);
+//   padding: 0 2px;
+// }
+
+// .overflow-helper {
+//   width: 100%;
+//   overflow: hidden;
+//   visibility: hidden;
+//   position: absolute;
+//   border-radius: 12px;
+// }

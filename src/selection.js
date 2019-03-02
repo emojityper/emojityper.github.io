@@ -13,9 +13,8 @@ import * as promises from './lib/promises.js';
 
   input.addEventListener('query', (ev) => {
     const query = ev.detail;
-    const selection = (query.text === null && query.focus !== undefined && query.selection);
-    value = query.focus;
-    if (!selection) {
+    value = query.text.trim();
+    if (!query.selection || !value) {
       if (!pending) {
         namer.value = '';  // clear on done if not pending
         advanced.hidden = true;
@@ -26,10 +25,10 @@ import * as promises from './lib/promises.js';
     advanced.hidden = false;
   });
 
-  const handler = ev => {
+  const handler = (ev) => {
     button.disabled = !namer.value;
   };
-  'input change'.split(/\s+/).forEach(type => namer.addEventListener(type, handler));
+  'input change'.split(/\s+/).forEach((type) => namer.addEventListener(type, handler));
 
   form.addEventListener('submit', (ev) => {
     ev.preventDefault();
@@ -59,7 +58,7 @@ import * as promises from './lib/promises.js';
       }
       button.classList.add('success');
       return false;
-    }).catch(err => {
+    }).catch((err) => {
       button.classList.add('failure');
       console.warn('failed to submit emoji', err);
       return true;

@@ -437,7 +437,7 @@ chooser.addEventListener('keydown', (ev) => {
         exactMatch = row;
         return false;
       }
-      return row[0].startsWith(q) || row[0][0] === '^';
+      return row[0].startsWith(q);
     });
     exactMatch && localResults.unshift(exactMatch);
 
@@ -452,10 +452,18 @@ chooser.addEventListener('keydown', (ev) => {
   // handler for a prefix search
   typer.addEventListener('query', (ev) => {
     const query = ev.detail;
+
+    // do nothing if nothing changed
+    if (query.text === previous.text &&
+        query.prefix === previous.prefix &&
+        query.selection === previous.selection) {
+      return;
+    }
+
     const now = performance.now();
 
     // immediately inform manager of modifier buttons (gender, tone), if it's a full word search
-    const info = modifier.modify(!ev.detail.prefix && ev.detail.focus || '');
+    const info = modifier.modify(!ev.detail.prefix && ev.detail.text || '');
     manager.setModifier(info);
 
     if (previous.text !== query.text) {

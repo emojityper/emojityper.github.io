@@ -16,25 +16,20 @@ value({detail: typer.value});
 document.body.addEventListener('keydown', (ev) => {
   switch (ev.key) {
   case 'Escape':
+    if (ev.defaultPrevented) {
+      return;  // do nothing
+    }
+
     // #1: focus on typer
     if (document.activeElement !== typer) {
       typer.focus();
       break;
     }
 
-    // #2: clear selection
-    if (typer.selectionStart !== typer.selectionEnd) {
-      if (typer.selectionDirection === 'backward') {
-        typer.selectionStart = typer.selectionEnd;
-      } else {
-        typer.selectionEnd = typer.selectionStart;
-      }
-      break;
-    }
-
-    // #3: move to end of input
+    // #2: move to end of input
     const l = typer.value.length;
     typer.setSelectionRange(l, l);
+    console.info('selected', l, l);
     break;
   }
 });

@@ -621,6 +621,11 @@ acorn@^6.0.5:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.0.6.tgz#cd75181670d5b99bdb1b1c993941d3a239ab1f56"
   integrity sha512-5M3G/A4uBSMIlfJ+h9W125vJvPFH/zirISsW5qfxF5YzEvXJCtolLoQvM5yZft0DvMcUrPGKPOlgEu55I6iUtA==
 
+advanced-input@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/advanced-input/-/advanced-input-0.0.8.tgz#37ee4833fedaa3e10618c3db2de7850fb7a1e268"
+  integrity sha512-rCYAzioZy8o2Ds0c+ikGjWe2miEL3auW91oLod+aVTM2o/FzLaFBSBFNEfiCT6eOWVoIiSZSOMokQ/FK/OwrAQ==
+
 ajv@^6.5.5:
   version "6.6.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.1.tgz#6360f5ed0d80f232cc2b294c362d5dc2e538dd61"
