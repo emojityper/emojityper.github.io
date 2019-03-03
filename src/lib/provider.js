@@ -168,6 +168,11 @@ export const select = (function() {
   const runner = () => {
     const body = JSON.stringify(pending);
     pending = {};  // clear pending for next time
+
+    if (window._dev) {
+      return null;  // don't log in dev
+    }
+
     return navigator.sendBeacon(api + '/sel', body);
   };
 
