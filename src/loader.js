@@ -43,6 +43,11 @@ window['GoogleAnalyticsObject'] = 'ga';
 window.addEventListener('message', (ev) => {
   const type = ev.data.type || '';
   switch (type) {
+    case 'focus':
+      // used by extension to trigger focus
+      // Chrome disallows autofocus, but programatic works (as of 75): I don't think it'll last.
+      typer.focus();
+      break;
     case 'ga':
       // used by extension to log load time
       ga.apply(null, ev.data.payload);
