@@ -7,8 +7,7 @@ window.addEventListener('load', (ev) => {
 
   window.requestAnimationFrame(() => {
     const scriptPWACompat = document.createElement('script');
-    scriptPWACompat.src = 'https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js';
-    scriptPWACompat.setAttribute('integrity', 'sha384-VcI6S+HIsE80FVM1jgbd6WDFhzKYA0PecD/LcIyMQpT4fMJdijBh0I7Iblaacawc');
+    scriptPWACompat.src = 'https://unpkg.com/pwacompat';
     scriptPWACompat.setAttribute('crossorigin', 'anonymous');
     document.head.appendChild(scriptPWACompat);
     // nb. the outerHTML trick doesn't seem to work
